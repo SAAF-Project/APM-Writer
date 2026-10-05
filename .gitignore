@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Original chat-assistant instructions — kept local, not published
+/copilot/
+
+# Generated sections and local audit material — never commit real audit evidence
+output/
+data/
