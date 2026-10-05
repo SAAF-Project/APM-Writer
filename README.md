@@ -145,8 +145,26 @@ The goal is a co-produced APM section: driven by the auditor, structured by the 
 
 The inputs for an APM are confidential and can contain personal data. Use the agent only in an environment that is approved for that material. Do not commit real audit evidence, personal data, generated sections or credentials to this repository; use synthetic or anonymised data for examples and tests.
 
+## Requirements
+
+```bash
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+`requirements.txt` lists the packages the agent is built on:
+
+| Purpose | Packages |
+|---|---|
+| Model APIs | `anthropic` (Claude), `openai` (OpenAI / Azure OpenAI), `pydantic` |
+| Agentic workflow | `langgraph` (the intake as a state graph that stops and waits for each answer) |
+| Web app and file upload | `streamlit` |
+| Loading uploaded files | `pandas` (.csv), `python-docx` (.docx), `openpyxl` (.xlsx), `python-pptx` (.pptx), `pypdf` (.pdf) |
+| Configuration | `python-dotenv` (API keys and settings from a local `.env` file, which is git-ignored) |
+
 ## Status
 
-`scripts/run.py` is a skeleton: it holds the `available_sections` list and a `main()` in which the workflow above is laid out as comments and placeholders. The steps are not implemented yet.
+`scripts/run.py` is a skeleton: it imports the packages above, holds the `available_sections` list, and has a `main()` in which the workflow is laid out as comments and placeholders. The steps are not implemented yet.
 
 The plan for this agent is `plans/hackathon-2/junhan-wen-apm-assistant-agent.md`, submitted in [SAAF-Project/SAAF-Project#135](https://github.com/SAAF-Project/SAAF-Project/pull/135). What the agent must be judged against is in [`AUDIT-CRITERIA.md`](AUDIT-CRITERIA.md).

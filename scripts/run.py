@@ -2,8 +2,38 @@
 
     python scripts/run.py
 
-Skeleton only: the workflow steps are laid out as comments and placeholders.
+Skeleton only: the workflow steps are laid out as comments and placeholders. The imports below are
+the packages the implementation is expected to use; install them with `pip install -r requirements.txt`.
 """
+# -------------------- Standard library --------------------
+import json
+import logging
+import os
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+# -------------------- Model APIs --------------------
+import anthropic                                  # Claude API
+import openai                                     # OpenAI / Azure OpenAI API
+from pydantic import BaseModel                    # structured model replies
+
+# -------------------- Agentic workflow --------------------
+from langgraph.graph import END, START, StateGraph        # step-by-step intake as a state graph
+from langgraph.types import Command, interrupt            # stop and wait for the user's answer
+
+# -------------------- Web app and file upload --------------------
+import streamlit as st                            # browser UI: selection board, chat, file uploader
+
+# -------------------- Loading uploaded files --------------------
+import pandas as pd                               # .csv and tabular exports
+from docx import Document                         # .docx
+from openpyxl import load_workbook                # .xlsx
+from pptx import Presentation                     # .pptx
+from pypdf import PdfReader                       # .pdf
+
+# -------------------- Configuration --------------------
+from dotenv import load_dotenv                    # API keys and settings from a local .env file
 
 # Sections the agent can write. Update this list to add or remove sections.
 available_sections = ['2.6.1', '2.6.2', '2.6.3']

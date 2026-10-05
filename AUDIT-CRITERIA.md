@@ -81,7 +81,7 @@ The output is narrative text for an APM, not findings, so `outputs/schemas/findi
 
 ## 5. Coverage gaps
 
-- **Not implemented yet.** `scripts/run.py` contains the workflow as comments and placeholders only. No step runs, no model is called, and nothing is saved.
+- **Not implemented yet.** `scripts/run.py` imports the planned packages and contains the workflow as comments and placeholders only. No step runs, no model is called, and nothing is saved.
 - **No public tests or sample data yet.** Meaningful tests of this agent have to refer to real company planning documents, which cannot be published. A synthetic document set is needed before the criteria can be tested in public.
 - **Section definitions are not in the repository.** The mandatory documents and the output structure per section are not yet defined in code; `available_sections` only lists section numbers.
 - **One section per session.** Writing several sections from one shared scoping conversation is not designed yet.
