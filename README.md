@@ -1,4 +1,4 @@
-# APM-Writer
+# APM Writing Assistant
 
 A conversational agent that helps an auditor draft sections of the Audit Planning Memorandum (APM) for an audit-with-opinion engagement. The auditor picks a section, the agent runs a structured, step-by-step intake (scope, documents, clarifying questions), and then writes the section in a fixed structure and saves it locally.
 
@@ -167,4 +167,4 @@ pip install -r requirements.txt
 
 `scripts/run.py` is a skeleton: it imports the packages above, holds the `available_sections` list, and has a `main()` in which the workflow is laid out as comments and placeholders. The steps are not implemented yet.
 
-The plan for this agent is `plans/hackathon-2/junhan-wen-apm-assistant-agent.md`, submitted in [SAAF-Project/SAAF-Project#135](https://github.com/SAAF-Project/SAAF-Project/pull/135). What the agent must be judged against is in [`AUDIT-CRITERIA.md`](AUDIT-CRITERIA.md).
+The plan for this agent is `plans/hackathon-2/junhan-wen-apm-writing-assistant.md`, submitted in [SAAF-Project/SAAF-Project#135](https://github.com/SAAF-Project/SAAF-Project/pull/135). What the agent must be judged against is in [`AUDIT-CRITERIA.md`](AUDIT-CRITERIA.md).
