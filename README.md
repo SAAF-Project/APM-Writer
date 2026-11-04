@@ -145,6 +145,28 @@ The goal is a co-produced APM section: driven by the auditor, structured by the 
 
 The inputs for an APM are confidential and can contain personal data. Use the agent only in an environment that is approved for that material. Do not commit real audit evidence, personal data, generated sections or credentials to this repository; use synthetic or anonymised data for examples and tests.
 
+## Prerequisites
+
+- Python: TODO(owner): state the supported Python version(s).
+- An API key for the model provider the implementation will use (Anthropic and/or OpenAI / Azure OpenAI; see `requirements.txt`). Keys are read from environment variables, loaded from a local `.env` file via `python-dotenv`; `.env` is git-ignored. Never put a key in code or in this repository.
+- TODO(owner): list the exact environment variable names once `scripts/run.py` reads them (none are read yet).
+
+## Model and data residency
+
+The implementation is planned to call a hosted model API: `requirements.txt` includes the `anthropic` (Claude) and `openai` (OpenAI / Azure OpenAI) client libraries. No model is called yet, because `scripts/run.py` is a skeleton.
+
+- Model and provider: TODO(owner): name the model(s) and provider the agent will use.
+- Where data goes: once implemented, the uploaded documents and the conversation would be sent to that provider's API. TODO(owner): state the hosting region, whether a local or EU-hosted option (for example Azure OpenAI in an EU region) is supported, and what the provider retains.
+
+## Guardrails
+
+This agent follows the SAAF command allowlist (`regulatory/guardrails/allowed-commands.md` in the main SAAF-Project repo). `scripts/run.py` runs no shell commands today; the implementation must not run `rm`, `sudo`, `curl`, `wget`, `ssh`, `scp`, `chmod`, `chown` or `cron`, and must not `pip install` at runtime. TODO(owner): confirm this once the workflow steps are implemented.
+
+## License and contact
+
+- License: TODO(owner): licence to be decided by Stichting SAAF.
+- Maintainer: Junhan Wen (see the metadata in [`AUDIT-CRITERIA.md`](AUDIT-CRITERIA.md)). TODO(owner): add a preferred contact channel.
+
 ## Requirements
 
 ```bash
