@@ -1,4 +1,4 @@
-# AUDIT-CRITERIA.md — APM-Writer
+# AUDIT-CRITERIA.md — APM Writing Assistant
 
 > What this agent must be judged against as an auditee: its control objectives, testable acceptance criteria, and known limits. The [README](README.md) says what the agent does. This document follows the SAAF A2 standard (`docs/conventions/audit-criteria-template.md` in the main SAAF-Project repo).
 
@@ -8,13 +8,13 @@
 
 | Field | Value |
 |---|---|
-| **Agent** | APM-Writer |
+| **Agent** | APM Writing Assistant |
 | **Repository** | https://github.com/SAAF-Project/APM-Writer |
 | **Maintainer(s)** | Junhan Wen |
 | **Last reviewed** | 2026-10-05 |
 | **Status** | Draft |
 
-**Sources used to draft this document:** the README and `scripts/run.py` in this repository, and the plan `plans/hackathon-2/junhan-wen-apm-assistant-agent.md` (SAAF-Project/SAAF-Project#135). Not yet reviewed by a second person.
+**Sources used to draft this document:** the README and `scripts/run.py` in this repository, and the plan `plans/hackathon-2/junhan-wen-apm-writing-assistant.md` (SAAF-Project/SAAF-Project#135). Not yet reviewed by a second person.
 
 **Implementation state:** `scripts/run.py` is a skeleton. The agent is designed to make model calls at runtime, so AI-specific frameworks apply to the criteria below, but none of the steps is implemented yet. Every criterion in this document is a design target, not a verified behaviour.
 

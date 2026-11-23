@@ -1,4 +1,4 @@
-"""Entry point of the APM-Writer: drafts one section of the Audit Planning Memorandum per session.
+"""Entry point of the APM Writing Assistant: drafts one section of the Audit Planning Memorandum per session.
 
     python scripts/run.py
 
