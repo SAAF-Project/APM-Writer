@@ -1,20 +1,4 @@
-# Model APIs
-anthropic>=1.0
-openai>=1.0
-pydantic>=2.0
-
-# Agentic workflow
-langgraph>=1.0
-
-# Web app and file upload
-streamlit>=1.30
-
-# Loading uploaded files (.csv, .docx, .xlsx, .pptx, .pdf)
-pandas>=2.0
-python-docx>=1.1
-openpyxl>=3.1
-python-pptx>=1.0
-pypdf>=4.0
-
-# Configuration
-python-dotenv>=1.0
+# Current status-only skeleton and its tests use Python 3.9+ standard library only.
+# No model client, UI framework, file parser or pip package is required or executed.
+# Original unvalidated implementation candidates are preserved in requirements-planned.in.
+# Future runtime dependencies need a reviewed provider/framework decision and version lock.
