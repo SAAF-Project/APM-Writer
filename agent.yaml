@@ -1,0 +1,29 @@
+# Design-only descriptive contract. No audit workflow/provider is implemented.
+name: APM Writing Assistant
+repo: SAAF-Project/APM-Writer
+island: governance
+maturity: building
+confirmed: false
+category: AI governance
+language: Python
+description: Design skeleton for an auditor-led Audit Planning Memorandum writing assistant; currently only reports status and refuses to claim that an intake or draft has run.
+tags: [audit-planning, design-skeleton, human-review]
+depends_on: []
+mandate:
+  purpose: Preserve the proposed evidence-restricted writing workflow while making its unimplemented status visible; no assessment or drafting authority is active.
+  allowed_tools: [show_static_design_status, list_configured_section_identifiers, refuse_unimplemented_workflow]
+  forbidden_actions:
+    - action: change_own_config
+      rationale: Section definitions, workflow gates, dependencies and provider choices require separate review.
+    - action: call_model_provider_or_read_audit_documents
+      rationale: Runtime and data-processing authorization are not implemented or accepted.
+    - action: produce_or_save_audit_section
+      rationale: Scope confirmation, document intake, synthesis and source validation are still design targets.
+    - action: present_skeleton_tests_as_control_assurance
+      rationale: Status/refusal tests do not establish the CO-1 to CO-5 content and confidentiality targets.
+  trusted_inputs: [reviewed_design_metadata, explicitly_requested_status_query]
+  human_approval_required_for:
+    - accepting section definitions and mandatory document requirements
+    - implementing workflow gates and selecting model/provider/data terms
+    - processing confidential inputs, accepting drafts and publishing results
+  evidence_policy: cite_only_given_context

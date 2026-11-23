@@ -1,0 +1,24 @@
+# Historical dependency candidates from the original design, not an install/lock contract.
+# No provider or framework is selected or executed by the current skeleton.
+# A future implementation must resolve/validate versions and data terms before use.
+
+# Model APIs
+anthropic>=1.0
+openai>=1.0
+pydantic>=2.0
+
+# Agentic workflow
+langgraph>=1.0
+
+# Web app and file upload
+streamlit>=1.30
+
+# Loading uploaded files (.csv, .docx, .xlsx, .pptx, .pdf)
+pandas>=2.0
+python-docx>=1.1
+openpyxl>=3.1
+python-pptx>=1.0
+pypdf>=4.0
+
+# Configuration
+python-dotenv>=1.0

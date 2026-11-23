@@ -1,10 +1,30 @@
 # APM Writing Assistant
 
+**Design skeleton — no audit intake or section writing is implemented.** The current
+CLI can show static status and otherwise exits with code 2. The workflow below is
+the proposed design, not evidence of working controls or a usable audit agent.
+
+## Current offline quickstart
+
+Python 3.9 and 3.12 are tested for this skeleton; no packages or API key are needed.
+
+```bash
+python3 -I -S scripts/run.py --status  # JSON metadata; can_draft is false, exit 0
+python3 -I -S scripts/run.py           # explicit not-implemented message, exit 2
+python3 -I -S -m unittest discover -s tests -v
+```
+
+Exit 0 from `--status` confirms only that a metadata query succeeded. No document
+is read, no model is called, and no section is produced or saved. Unsupported
+drafting/section arguments also fail with exit 2.
+
+## Proposed agent
+
 A conversational agent that helps an auditor draft sections of the Audit Planning Memorandum (APM) for an audit-with-opinion engagement. The auditor picks a section, the agent runs a structured, step-by-step intake (scope, documents, clarifying questions), and then writes the section in a fixed structure and saves it locally.
 
 The agent is a **writing assistant, not a decision-maker**. It structures and formalises the auditor's own scoping and synthesis into APM language. It does not assess risk on its own and it does not write anything the provided evidence does not support.
 
-## What the agent can write
+## Proposed sections
 
 An APM usually follows a fixed outline, so a section number always covers the same topic. When a session starts, the agent first gives an overview of the sections it can write. For example, they could be:
 
@@ -34,7 +54,7 @@ Which APM section do you want to write?
 
 One section is written per session. The workflow for the selected section then starts.
 
-## How a session runs
+## Planned session workflow
 
 Every section uses the same intake process. Only the mandatory documents and the structure of the final text differ per section.
 
@@ -96,7 +116,7 @@ Section 2.6.1 saved to: ./output/apm-2.6.1_20260703_141500.md
 
 Only the section that was written is saved. The conversation and the uploaded documents are not.
 
-## How the agent talks to you
+## Planned conversation rules
 
 These rules apply in every step:
 
@@ -106,7 +126,7 @@ These rules apply in every step:
 - **Always steering towards scope.** Each recap states what is in scope, what is out of scope, and what still depends on further evidence.
 - **No draft during the intake.** The section is written only after scope and documents are confirmed.
 
-## Writing rules
+## Proposed writing rules
 
 All sections follow the same style:
 
@@ -124,7 +144,7 @@ Rules that protect the content:
 - **No harmonising.** The terminology of the sources is used as it is. If sources differ, the text notes the difference.
 - **Scope discipline.** Material outside the confirmed scope is not used, not even for trend analysis.
 
-## What the agent will not do
+## Intended prohibitions
 
 - Create content without input evidence.
 - Replace the auditor's judgement or risk assessment.
@@ -132,7 +152,7 @@ Rules that protect the content:
 
 The quality of the output depends directly on the quality of the input. The agent works best when you provide your own synthesis next to the raw documents: bullet-point summaries, the key risks and themes you see, and your first observations or concerns.
 
-## Recommended way of working
+## Proposed way of working
 
 1. Define the scope clearly.
 2. Provide the documents together with your own synthesis.
@@ -145,48 +165,47 @@ The goal is a co-produced APM section: driven by the auditor, structured by the 
 
 The inputs for an APM are confidential and can contain personal data. Use the agent only in an environment that is approved for that material. Do not commit real audit evidence, personal data, generated sections or credentials to this repository; use synthetic or anonymised data for examples and tests.
 
-## Prerequisites
+## Runtime and dependency status
 
-- Python: TODO(owner): state the supported Python version(s).
-- An API key for the model provider the implementation will use (Anthropic and/or OpenAI / Azure OpenAI; see `requirements.txt`). Keys are read from environment variables, loaded from a local `.env` file via `python-dotenv`; `.env` is git-ignored. Never put a key in code or in this repository.
-- TODO(owner): list the exact environment variable names once `scripts/run.py` reads them (none are read yet).
+The implemented status/refusal entry point uses only Python's standard library.
+`requirements.txt` records that current contract. The original unused SDK, UI and
+file-parser suggestions are preserved in [`requirements-planned.in`](requirements-planned.in)
+for design review. Their version ranges have not been validated and are not an
+installation or production lockfile. No provider or framework is selected by
+preserving that list.
 
 ## Model and data residency
 
-The implementation is planned to call a hosted model API: `requirements.txt` includes the `anthropic` (Claude) and `openai` (OpenAI / Azure OpenAI) client libraries. No model is called yet, because `scripts/run.py` is a skeleton.
-
-- Model and provider: TODO(owner): name the model(s) and provider the agent will use.
-- Where data goes: once implemented, the uploaded documents and the conversation would be sent to that provider's API. TODO(owner): state the hosting region, whether a local or EU-hosted option (for example Azure OpenAI in an EU region) is supported, and what the provider retains.
+No provider client is imported, no key or `.env` is read, and no model is called.
+The proposed workflow could send confidential documents and conversation to a
+hosted API, but provider, model, region, retention and any local/EU option remain
+undecided. These choices and customer authorization must be accepted before a
+future implementation processes real material. Current CI does not evaluate any
+provider, model quality or processing terms.
 
 ## Guardrails
 
-This agent follows the SAAF command allowlist (`regulatory/guardrails/allowed-commands.md` in the main SAAF-Project repo). `scripts/run.py` runs no shell commands today; the implementation must not run `rm`, `sudo`, `curl`, `wget`, `ssh`, `scp`, `chmod`, `chown` or `cron`, and must not `pip install` at runtime. TODO(owner): confirm this once the workflow steps are implemented.
+The future implementation is intended to follow the SAAF command allowlist (`regulatory/guardrails/allowed-commands.md` in the main SAAF-Project repo). `scripts/run.py` runs no shell commands today; the implementation must not run `rm`, `sudo`, `curl`, `wget`, `ssh`, `scp`, `chmod`, `chown` or `cron`, and must not `pip install` at runtime. TODO(owner): confirm this once the workflow steps are implemented.
 
 ## License and contact
 
 - License: TODO(owner): licence to be decided by Stichting SAAF.
-- Maintainer: Junhan Wen (see the metadata in [`AUDIT-CRITERIA.md`](AUDIT-CRITERIA.md)). TODO(owner): add a preferred contact channel.
+- Historical design maintainer: Junhan Wen (see [`AUDIT-CRITERIA.md`](AUDIT-CRITERIA.md)). An accepted current owner and preferred private contact channel remain to be confirmed; this batch does not assign ownership. See [`SECURITY.md`](SECURITY.md) for the current reporting boundary.
 
-## Requirements
+## Validation and remaining work
 
-```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
+The PR pipeline runs five synthetic, offline standard-library tests on Python
+3.9 and 3.12. They check the explicit refusal, truthful status, unsupported
+arguments and execution without site packages in a temporary directory with a
+synthetic `.env` and fake provider modules. No external service, real document,
+credential or audit output is used. These tests are not evidence that CO-1 to
+CO-5 work: the intake, section definitions, mandatory documents, writing,
+traceability checks, approvals and output storage still need implementation and
+separate synthetic/evaluation coverage.
 
-`requirements.txt` lists the packages the agent is built on:
-
-| Purpose | Packages |
-|---|---|
-| Model APIs | `anthropic` (Claude), `openai` (OpenAI / Azure OpenAI), `pydantic` |
-| Agentic workflow | `langgraph` (the intake as a state graph that stops and waits for each answer) |
-| Web app and file upload | `streamlit` |
-| Loading uploaded files | `pandas` (.csv), `python-docx` (.docx), `openpyxl` (.xlsx), `python-pptx` (.pptx), `pypdf` (.pdf) |
-| Configuration | `python-dotenv` (API keys and settings from a local `.env` file, which is git-ignored) |
-
-## Status
-
-`scripts/run.py` is a skeleton: it imports the packages above, holds the `available_sections` list, and has a `main()` in which the workflow is laid out as comments and placeholders. The steps are not implemented yet.
+The original workflow comments, configured section identifiers and design
+contributions are retained. Adding identifiers to `available_sections` does not
+implement a section. [`agent.yaml`](agent.yaml) describes only the skeleton's
+current mandate and remains unconfirmed.
 
 The plan for this agent is `plans/hackathon-2/junhan-wen-apm-writing-assistant.md`, submitted in [SAAF-Project/SAAF-Project#135](https://github.com/SAAF-Project/SAAF-Project/pull/135). What the agent must be judged against is in [`AUDIT-CRITERIA.md`](AUDIT-CRITERIA.md).

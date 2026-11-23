@@ -1,45 +1,35 @@
-"""Entry point of the APM Writing Assistant: drafts one section of the Audit Planning Memorandum per session.
+"""Design entry point of the APM Writing Assistant: intended to draft one Audit Planning Memorandum section per session.
 
     python scripts/run.py
 
-Skeleton only: the workflow steps are laid out as comments and placeholders. The imports below are
-the packages the implementation is expected to use; install them with `pip install -r requirements.txt`.
+Skeleton only: the workflow steps are comments and placeholders. Use --status to inspect the
+design metadata without credentials or dependencies. The default invocation refuses to imply a draft ran.
 """
-# -------------------- Standard library --------------------
+import argparse
 import json
-import logging
-import os
-from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+import sys
 
-# -------------------- Model APIs --------------------
-import anthropic                                  # Claude API
-import openai                                     # OpenAI / Azure OpenAI API
-from pydantic import BaseModel                    # structured model replies
+# Original, unused dependency candidates are retained in requirements-planned.in.
+# No provider SDK, local .env, audit document or UI framework is loaded here.
 
-# -------------------- Agentic workflow --------------------
-from langgraph.graph import END, START, StateGraph        # step-by-step intake as a state graph
-from langgraph.types import Command, interrupt            # stop and wait for the user's answer
-
-# -------------------- Web app and file upload --------------------
-import streamlit as st                            # browser UI: selection board, chat, file uploader
-
-# -------------------- Loading uploaded files --------------------
-import pandas as pd                               # .csv and tabular exports
-from docx import Document                         # .docx
-from openpyxl import load_workbook                # .xlsx
-from pptx import Presentation                     # .pptx
-from pypdf import PdfReader                       # .pdf
-
-# -------------------- Configuration --------------------
-from dotenv import load_dotenv                    # API keys and settings from a local .env file
-
-# Sections the agent can write. Update this list to add or remove sections.
+# Proposed section identifiers. Adding an identifier does not implement a section.
 available_sections = ['2.6.1', '2.6.2', '2.6.3']
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--status", action="store_true", help="show design status; does not run the workflow")
+    args = parser.parse_args(argv)
+    if args.status:
+        print(json.dumps({
+            "name": "APM Writing Assistant",
+            "implementation": "skeleton",
+            "can_draft": False,
+            "available_sections": available_sections,
+            "model_provider": None,
+        }, indent=2))
+        return 0
+
     # -------------------- Overview and section selection --------------------
     # Show which APM sections the agent can write (available_sections), with what each one
     # expects from the user and what it delivers.
@@ -82,6 +72,10 @@ def main():
     # Save only the written section to a local file and tell the user the path.
     output_path = None  # placeholder
 
+    print("APM Writing Assistant is not implemented: no intake, model call or section was produced. "
+          "Use --status to inspect the design metadata.", file=sys.stderr)
+    return 2
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

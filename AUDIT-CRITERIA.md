@@ -1,6 +1,6 @@
 # AUDIT-CRITERIA.md — APM Writing Assistant
 
-> What this agent must be judged against as an auditee: its control objectives, testable acceptance criteria, and known limits. The [README](README.md) says what the agent does. This document follows the SAAF A2 standard (`docs/conventions/audit-criteria-template.md` in the main SAAF-Project repo).
+> What this agent must be judged against as an auditee: its control objectives, testable acceptance criteria, and known limits. The [README](README.md) separates current skeleton behavior from the proposed workflow. This document follows the SAAF A2 standard (`docs/conventions/audit-criteria-template.md` in the main SAAF-Project repo).
 
 ---
 
@@ -14,11 +14,11 @@
 | **Last reviewed** | 2026-10-05 |
 | **Status** | Draft |
 
-**Sources used to draft this document:** the README and `scripts/run.py` in this repository, and the plan `plans/hackathon-2/junhan-wen-apm-writing-assistant.md` (SAAF-Project/SAAF-Project#135). Not yet reviewed by a second person.
+**Sources used to draft this document:** the README and `scripts/run.py` in this repository, and the plan `plans/hackathon-2/junhan-wen-apm-writing-assistant.md` (SAAF-Project/SAAF-Project#135). The original design mapping has not been accepted as a new standard. A technical review of the skeleton does not validate these framework mappings or their legal applicability.
 
-**Implementation state:** `scripts/run.py` is a skeleton. The agent is designed to make model calls at runtime, so AI-specific frameworks apply to the criteria below, but none of the steps is implemented yet. Every criterion in this document is a design target, not a verified behaviour.
+**Implementation state:** `scripts/run.py` is a skeleton. The agent is designed to make model calls at runtime, so AI-specific frameworks apply to the criteria below, but none of the steps is implemented yet. CO-1 to CO-5 remain design targets, not verified workflow behavior. A small, separate status/refusal contract is implemented and tested below.
 
-## 1. What the agent does
+## 1. What the agent is designed to do
 
 The agent helps an auditor draft one section of an Audit Planning Memorandum (APM) per session. The auditor selects a section, and the agent runs a fixed intake process: audit scoping, document intake and validation, iterative clarification of the scope, and then synthesis and writing in the structure defined for that section. The finished section is saved to a local file and the path is shown to the auditor. The output is a draft for the auditor to review.
 
@@ -81,8 +81,8 @@ The output is narrative text for an APM, not findings, so `outputs/schemas/findi
 
 ## 5. Coverage gaps
 
-- **Not implemented yet.** `scripts/run.py` imports the planned packages and contains the workflow as comments and placeholders only. No step runs, no model is called, and nothing is saved.
-- **No public tests or sample data yet.** Meaningful tests of this agent have to refer to real company planning documents, which cannot be published. A synthetic document set is needed before the criteria can be tested in public.
+- **Audit workflow not implemented.** `scripts/run.py` retains the workflow comments and placeholders. It reports static status or explicitly exits 2 without performing an intake, model call or draft. It no longer imports the unused proposed dependencies.
+- **Content tests still missing.** Five public offline tests cover only the skeleton boundary. A synthetic planning-document set with expected source references, missing-input cases and rejected drafts is needed to test the future content workflow; confidential company documents are not required for public regression tests.
 - **Section definitions are not in the repository.** The mandatory documents and the output structure per section are not yet defined in code; `available_sections` only lists section numbers.
 - **One section per session.** Writing several sections from one shared scoping conversation is not designed yet.
 - **No check of the draft against the documents.** Traceability is asked of the model; nothing verifies that a cited source actually contains the statement.
@@ -92,9 +92,24 @@ The output is narrative text for an APM, not findings, so `outputs/schemas/findi
 | Acceptance criterion | Verified? | Evidence |
 |---|---|---|
 | CO-1 to CO-4 — all criteria | ☐ | Not implemented; design targets only |
-| CO-5 — no credentials, evidence or generated sections in the repository | ☑ | Tracked files reviewed on 2026-10-05 |
+| CO-5 — no credentials, evidence or generated sections in the repository | Historical only | Original tracked-file review dated 2026-10-05; not a new full-history or current content assessment |
 | CO-5 — only the section is saved locally | ☐ | Not implemented |
+
+### Implemented skeleton contract (separate from CO-1 to CO-5)
+
+The following checks describe current code, not additions to the approved SAAF
+standards. Run `python3 -I -S -m unittest discover -s tests -v`; CI repeats the same
+five synthetic tests on Python 3.9 and 3.12. Results belong to the tested commit
+and run, not permanently to this file.
+
+| Criterion | Type | Evidence / limit |
+|---|---|---|
+| APM-SK-01 — A normal invocation cannot report a completed intake or draft. | `[code]` | `test_default_invocation_reports_unimplemented_instead_of_success`: exit 2, explicit stderr and no draft stdout. |
+| APM-SK-02 — A status query explicitly identifies a skeleton with `can_draft: false` and no model provider. | `[code]` | `test_status_is_explicit_design_metadata_not_a_draft`; successful metadata is not a successful audit run. |
+| APM-SK-03 — Unsupported section, draft and positional arguments cannot silently succeed. | `[code]` | `test_unknown_section_or_draft_options_are_not_silently_accepted`: exit 2. |
+| APM-SK-04 — The documented isolated invocation requires no site packages and leaves the synthetic working directory unchanged. | `[code]` | `test_isolated_cli_needs_no_site_packages_and_ignores_local_env_and_modules` plus status open/subprocess mocks. This is a bounded fixture, not a production sandbox. |
+| CO-2/CO-3/CO-4 — Draft grounding, scope quality and conversational behavior. | `[llm]` | **Not assessed:** there is no implementation, chosen model, evaluation set or provider run. |
 
 ## 7. Observability
 
-Nothing is logged today, because no step is implemented. The design saves only the finished section. A record of the confirmed scope, the documents used and the prompts sent to the model would be needed to trace a section back to its inputs.
+The current CLI writes only status JSON to stdout or a refusal to stderr; it creates no log or evidence dossier. No workflow step is implemented. The design saves only the finished section. A record of the confirmed scope, the documents used and the prompts sent to the model would be needed to trace a section back to its inputs.
